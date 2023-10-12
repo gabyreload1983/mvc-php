@@ -6,6 +6,10 @@ class Home extends Controller {
     }
 
     public function indexAction() {
+        $db = DB::getInstance();
+        $sql = "SELECT * FROM testing_users";
+        $users = $db->query($sql);
+        dnd($users);
         $this->view->render('home/index');
     }
 }

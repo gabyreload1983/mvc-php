@@ -18,4 +18,27 @@ class DB {
         }
         return self::$_instance;
     }
+
+    public function query($sql, $params = []) {
+        $this->error = false;
+        if($this->_query = $this->_pdo->prepare($sql)) {
+            $x = 1;
+            if(count($params)) {
+                foreach ($params as $params) {
+                    $this->_query->bindValue($x, $param);
+                    $x++;
+                }
+            }
+        }
+
+        if($this->_query->execute()){
+            $this->_result = $this->_query->fetchALL(PDO::FETCH_OBJ);
+            $this->_count = $this->_query->rowCount();
+            $this->_lastInsertID = $this->_pdo->lastInsertId();
+        } else {
+            $this->error = true;
+        }
+        return $this;
+
+    }
 }
