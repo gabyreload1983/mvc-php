@@ -8,10 +8,10 @@ class Home extends Controller {
     public function indexAction() {
         $db = DB::getInstance();
         $fields = [
-            'user_name' => 'Pili',
-            'email' => 'pili@gmail.com'
+            'user_name' => 'Pilar',
+            'email' => 'pilar@gmail.com'
         ];
-        $result = $db->insert('testing_users', $fields);
+        $result = $db->update('testing_users', 3,  $fields);
         $this->view->render('home/index');
     }
 }
