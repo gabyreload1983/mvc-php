@@ -2,7 +2,7 @@
 
 class DB {
     private static $_instance = null;
-    private $_pdo, $_query, $error = false, $_result, $_count = 0, $_lastInsertID = null;
+    private $_pdo, $_query, $_error = false, $_result, $_count = 0, $_lastInsertID = null;
 
     private function __construct() {
         try {
@@ -20,11 +20,11 @@ class DB {
     }
 
     public function query($sql, $params = []) {
-        $this->error = false;
+        $this->_error = false;
         if($this->_query = $this->_pdo->prepare($sql)) {
             $x = 1;
             if(count($params)) {
-                foreach ($params as $params) {
+                foreach ($params as $param) {
                     $this->_query->bindValue($x, $param);
                     $x++;
                 }
@@ -36,9 +36,33 @@ class DB {
             $this->_count = $this->_query->rowCount();
             $this->_lastInsertID = $this->_pdo->lastInsertId();
         } else {
-            $this->error = true;
+            $this->_error = true;
         }
         return $this;
 
+    }
+
+    public function insert($table, $fields = []) {
+        $fieldString = '';
+        $valueString = '';
+        $values = [];
+
+        foreach ($fields as $field => $value) {
+            $fieldString .= '`' . $field . '`,';
+            $valueString .= '?,';
+            $values[] = $value; 
+        }
+        $fieldString = rtrim($fieldString, ',');
+        $valueString = rtrim($valueString, ',');
+        $sql = "INSERT INTO {$table} ({$fieldString}) VALUES ({$valueString})";
+        if(!$this->query($sql, $values)->error()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function error() {
+        return $this->_error;
     }
 }
