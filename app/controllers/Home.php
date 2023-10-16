@@ -7,8 +7,13 @@ class Home extends Controller {
 
     public function indexAction() {
         $db = DB::getInstance();
-        $columns = $db->get_columns("testing_users");
-        dnd($columns);
+        $users = $db->findFirst("testing_users", [
+            'conditions' => ["user_name = ?"],
+            'bind' => ['gaby'],
+            'order' => "email","user_name",
+            'limit' => 2
+        ]);
+        dnd($users);
         $this->view->render('home/index');
     }
 }

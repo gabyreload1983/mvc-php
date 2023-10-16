@@ -62,6 +62,68 @@ class DB {
         }
     }
 
+    protected function _read($table, $params = []) {
+        $conditionsString = '';
+        $bind = [];
+        $order = '';
+        $limit = '';
+
+        //conditions
+        if(isset($params['conditions'])) {
+            if(is_array($params['conditions'])) {
+                foreach($params['conditions'] as $condition) {
+                    $conditionsString .= ' ' . $condition . ' AND';
+                } 
+                $conditionsString = trim($conditionsString);
+                $conditionsString = rtrim($conditionsString, ' AND');
+            } else {
+                $conditionsString = $params['conditions'];
+            }
+            if($params['conditions'] != '') {
+                $conditionsString = ' WHERE ' . $conditionsString;
+            }
+        }
+
+        //bind
+        if(array_key_exists('bind', $params)) {
+            $bind = $params['bind'];
+        }
+
+        //order
+        if(array_key_exists('order', $params)) {
+            $order = ' ORDER BY ' . $params['order'];
+        }
+
+        //limit
+        if(array_key_exists('limit', $params)) {
+            $limit = ' LIMIT ' . $params['limit'];
+        }
+
+        
+        $sql = "SELECT * FROM {$table}{$conditionsString}{$order}{$limit}";
+        if($this->query($sql, $bind)) {
+            if(!count($this->_result)) return false;
+            return true;
+        }
+
+        return false;
+
+    }
+
+    public function find($table, $params = []) {
+        if($this->_read($table, $params)) {
+            return $this->results();
+        }
+        return false;
+    }
+
+    public function findFirst($table, $params = []) {
+        if($this->_read($table, $params)) {
+            return $this->first();
+        }
+        return false;
+    }
+
     public function update($table, $id, $fields = []) {
         $fieldString = '';
         $values = [];
