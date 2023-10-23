@@ -3,7 +3,7 @@
 
 <?php $this->start('body') ?>
 <div class="container">
-    <div class="row">
+    <div class="row justify-content-center">
         <div class="col-12 col-lg-6 col-md-4 bg-secondary mt-3 border rounded">
             <h3>Login</h3>
             <form action="<?=PROOT?>register/login">
