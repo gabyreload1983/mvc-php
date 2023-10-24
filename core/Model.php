@@ -14,18 +14,19 @@ class Model {
     protected function  _setTableColumns() {
         $columns = $this->get_columns();
         foreach ($columns as $column) {
+            $columnName = $column->Field;
             $this->_columnNames[] = $column->Field;
             $this->{$columnName} = null;
         }
     }
 
     public function get_columns() {
-        return $this->_db->get_columns($this->table);
+        return $this->_db->get_columns($this->_table);
     }
 
     public function find($params = []) {
         $results = [];
-        $resultsQuery = $this->_db-find($this->_table, $params);
+        $resultsQuery = $this->_db->find($this->_table, $params);
         foreach($resultsQuery as $result) {
             $obj = new $this->_modelName($this->_table);
             $obj->populateObjData($result);
@@ -35,7 +36,7 @@ class Model {
     }
     
     public function findFirst($params = []) {
-        $resultQuery = $this->_db-findFirst($this->_table, $params);
+        $resultQuery = $this->_db->findFirst($this->_table, $params);
         $result = new $this->_modelName($this->_table);
         $result->populateObjData($resultQuery);
         return $result;

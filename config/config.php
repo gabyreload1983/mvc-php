@@ -13,3 +13,7 @@ define('DEFAULT_LAYOUT', 'default');
 define('PROOT', '/');
 
 define('SITE_TITLE', 'Freeskills MVC Framework');
+
+define('CURRENT_USER_SESSION_NAME', 'sddLKJBJFdgdngLFNDNgfdsdgDGdkl');
+define('REMEMBER_ME_COOKIE_NAME', 'DLGKdlñgnÑLDGñlDFGlkNhglñkHLLÑFH');
+define('REMEMBER_COOKIE_EXPIRY', 6048);
